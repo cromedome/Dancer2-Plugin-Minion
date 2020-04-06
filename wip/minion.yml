@@ -1,0 +1,27 @@
+# DB settings
+dsn: postgresql://postgres:cg73w%!p%pg3@devdb1.clearbuilt.com/minion
+
+# Dashboard settings
+dashboard_port: 3000
+dashboard_return_url: http://jason.efab.clearbuilt.com
+dashboard_pid: /var/run/dashboard-jason.pid
+
+# What queues should we accept jobs for?
+valid_queues:
+    - default
+    - efab
+
+# In the absence of other settings, use these!
+default:
+    max_children: 1
+    queues: 
+        - default
+
+# Host-specific settings
+hosts:
+    aws-dev2:
+        max_children: 2
+        queues:
+            - default
+            - efab
+
