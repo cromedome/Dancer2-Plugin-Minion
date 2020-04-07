@@ -4,15 +4,15 @@ use Dancer2::Plugin;
 use Minion;
 use Carp qw( croak );
 use List::Util qw( any );
-use Sys::Hostname;
+use Net::Domain qw(hostname);
 
 # Not sure how many beyond Minion will survive...
 plugin_keywords qw(
-   minion
-   has_invalid_queues
-   get_invalid_queues
-   add_job
-   run_job
+    minion
+    has_invalid_queues
+    get_invalid_queues
+    add_task
+    enqueue
 );
 
 my @VALID_QUEUES;
@@ -25,14 +25,6 @@ has 'minion' => (
         my $self = shift;
         $ENV{ MOJO_PUBSUB_EXPERIMENTAL } = 1;
         Minion->new( Pg => $self->_minion_config->{ dsn } );
-    },
-);
-
-has _minion_config => (
-    is      => 'ro',
-    default => sub {
-        my $self = shift;
-        $self->load_config( 'environments/minions.yml' );
     },
 );
 
@@ -55,16 +47,21 @@ sub get_invalid_queues {
     push @VALID_QUEUES, $self->get_environment if $self->get_environment ne 'production';
 
     my %queue_map;
-    @queue_map{ @VALID_QUEUES } = (); # Transform queue list into hash slice for easy lookup
+    @queue_map{ @VALID_QUEUES } = ();    # Transform queue list into hash slice for easy lookup
     my @invalid_queues = grep !exists $queue_map{ $_ }, @queues;
     return @invalid_queues;
 }
 
-sub run_job {
+sub add_task {
+    return $_[0]->minion->enqueue( @_ );
+}
+
+# TODO: Match Minion::enqueue() and Beam::Minion::enqueue()
+sub enqueue {
     my ( $self, $args ) = @_;
 
-    my $temp_name = $args->{ name     } or croak "run_job(): must define job name!";
-    my $project   = $args->{ project  } or croak "run_job(): must define a project!";
+    my $temp_name = $args->{ name }    or croak "run_job(): must define job name!";
+    my $project   = $args->{ project } or croak "run_job(): must define a project!";
     my $job_args  = $args->{ job_args };
     my $queue     = $self->_get_queue( $args->{ queue } );
     croak "run_job(): Invalid job queue '$queue' specified" if $self->has_invalid_queues( $queue );
@@ -73,45 +70,42 @@ sub run_job {
     my $job_name = "$project-$env-$temp_name";
     my $title    = $args->{ title } // $job_name;
 
-    my %notes = ( 
+    my %notes = (
         title   => $title,
         project => $project,
         env     => $env,
     );
 
-    return $self->runner->enqueue( $temp_name => $job_args => { notes => \%notes, queue => $queue });
+    return $self->runner->enqueue(
+        $temp_name => $job_args => { notes => \%notes, queue => $queue } );
 }
 
-sub get_hostconfig {
-    my $self = shift;
-
-    my $minion_config = $self->_minion_config;
+sub _get_hostconfig {
+    my $self          = shift;
+    my $minion_config = $self->config;
     my $hostname      = get_hostname();
 
-    if( exists $minion_config->{ hosts }{ $hostname }) {
+    if ( exists $minion_config->{ hosts }{ $hostname } ) {
         return $minion_config->{ hosts }{ $hostname };
     } else {
         return $minion_config->{ default };
     }
 }
 
-sub get_hostname {
-    my ($short_hostname) = split /\./, hostname();
-    return $short_hostname;
-}
-
 sub _get_queue {
-   my $self = shift;
-   my $requested_queue = shift // 'default';
+    my $self            = shift;
+    my $requested_queue = shift // 'default';
 
-   if( $self->get_environment eq 'production' ) {
-      return $requested_queue;
-   } else {
-      return $self->get_environment;
-   }
+    if ( $self->get_environment eq 'production' ) {
+        return $requested_queue;
+    }
+    else {
+        return $self->get_environment;
+    }
 }
 
 1;
+__END__
 
 =pod
 
@@ -227,4 +221,3 @@ Requires a job name, and if the job requires any, job arguments.
 
 =cut
 
-1;
