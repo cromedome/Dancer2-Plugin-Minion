@@ -1,16 +1,24 @@
-package Clearbuilt::JobQueue;
+package Dancer2::Plugin::Minion;
 
-use Moo;
+use Dancer2::Plugin;
 use Minion;
 use Carp qw( croak );
 use List::Util qw( any );
 use Sys::Hostname;
-with 'Clearbuilt::Role::ConfigReader';
-with 'Clearbuilt::Role::GetEnvironment';
+
+# Not sure how many beyond Minion will survive...
+plugin_keywords qw(
+   minion
+   has_invalid_queues
+   get_invalid_queues
+   add_job
+   run_job
+);
 
 my @VALID_QUEUES;
 
-has 'runner' => (
+# TODO: How do we deal with database config?
+has 'minion' => (
     is      => 'ro',
     lazy    => 1,
     default => sub {
