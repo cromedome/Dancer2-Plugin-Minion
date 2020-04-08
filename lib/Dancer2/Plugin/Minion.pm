@@ -2,101 +2,45 @@ package Dancer2::Plugin::Minion;
 
 use Dancer2::Plugin;
 use Minion;
-use Carp qw( croak );
-use List::Util qw( any );
-use Net::Domain qw(hostname);
+use Data::Dumper;
 
-# Not sure how many beyond Minion will survive...
 plugin_keywords qw(
     minion
-    has_invalid_queues
-    get_invalid_queues
     add_task
     enqueue
 );
 
-my @VALID_QUEUES;
+has _backend => (
+    is => 'ro',
+    from_config => 'backend',
+    default => sub{ '' },
+);
+
+has _dsn => (
+    is => 'ro',
+    from_config => 'dsn',
+    default => sub{ '' },
+);
 
 has 'minion' => (
     is      => 'ro',
     lazy    => 1,
     default => sub {
-        Minion->new( $_[0]->config->{ backend } => $_[0]->config->{ dsn } );
+        #print STDERR $_[0]->_backend . " AND " . $_[0]->_dsn . "\n";
+        Minion->new( $_[0]->_backend => $_[0]->_dsn );
     },
 );
 
-sub BUILD {
-    @VALID_QUEUES = $_[0]->config->{ valid_queues }->@*;
-}
-
-sub has_invalid_queues {
-    my ( $self, @queues ) = @_;
-    return 1 if $self->get_invalid_queues( @queues );
-    return 0;
-}
-
-sub get_invalid_queues {
-    my ( $self, @queues ) = @_;
-
-    # If we aren't in production, push the environment name to the valid queue list
-    push @VALID_QUEUES, $self->get_environment if $self->get_environment ne 'production';
-
-    my %queue_map;
-    @queue_map{ @VALID_QUEUES } = ();    # Transform queue list into hash slice for easy lookup
-    my @invalid_queues = grep !exists $queue_map{ $_ }, @queues;
-    return @invalid_queues;
-}
-
 sub add_task {
-    return $_[0]->minion->enqueue( @_ );
+    print STDERR "add\n";
+    #return $_[0]->minion;
+    return $_[0]->minion->add_task( @_ );
 }
 
-# TODO: Match Minion::enqueue() and Beam::Minion::enqueue()
 sub enqueue {
-    my ( $self, $args ) = @_;
-
-    my $temp_name = $args->{ name }    or croak "run_job(): must define job name!";
-    my $project   = $args->{ project } or croak "run_job(): must define a project!";
-    my $job_args  = $args->{ job_args };
-    my $queue     = $self->_get_queue( $args->{ queue } );
-    croak "run_job(): Invalid job queue '$queue' specified" if $self->has_invalid_queues( $queue );
-
-    my $env      = $self->get_environment;
-    my $job_name = "$project-$env-$temp_name";
-    my $title    = $args->{ title } // $job_name;
-
-    my %notes = (
-        title   => $title,
-        project => $project,
-        env     => $env,
-    );
-
-    return $self->runner->enqueue(
-        $temp_name => $job_args => { notes => \%notes, queue => $queue } );
-}
-
-sub _get_hostconfig {
-    my $self          = shift;
-    my $minion_config = $self->config;
-    my $hostname      = get_hostname();
-
-    if ( exists $minion_config->{ hosts }{ $hostname } ) {
-        return $minion_config->{ hosts }{ $hostname };
-    } else {
-        return $minion_config->{ default };
-    }
-}
-
-sub _get_queue {
-    my $self            = shift;
-    my $requested_queue = shift // 'default';
-
-    if ( $self->get_environment eq 'production' ) {
-        return $requested_queue;
-    }
-    else {
-        return $self->get_environment;
-    }
+    print STDERR "enqueue\n";
+    #return $_[0]->minion;
+    return $_[0]->minion->enqueue( $_[1] );
 }
 
 1;

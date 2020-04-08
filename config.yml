@@ -1,31 +1,4 @@
----
 plugins:
-   minion:
-      dsn: postgresql://postgres:cg73w%!p%pg3@devdb1.clearbuilt.com/minion
-      backend: Pg
-
-      # What queues should we accept jobs for?
-      valid_queues:
-          - foo
-          - bar
-
-      # In the absence of other settings, use these!
-      default:
-          max_children: 1
-          queues: 
-              - default
-
-      # Host-specific settings
-      hosts:
-          localhost:
-              max_children: 2
-              queues:
-                  - default
-                  - foo
-                  - bar
-          some-other-host:
-              max_children: 8
-              queues:
-                  - default
-                  - bar
-
+    Minion:
+        dsn: sqlite:test.db
+        backend: SQLite
