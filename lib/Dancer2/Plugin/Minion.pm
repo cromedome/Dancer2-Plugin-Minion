@@ -17,21 +17,16 @@ plugin_keywords qw(
 
 my @VALID_QUEUES;
 
-# TODO: How do we deal with database config?
 has 'minion' => (
     is      => 'ro',
     lazy    => 1,
     default => sub {
-        my $self = shift;
-        $ENV{ MOJO_PUBSUB_EXPERIMENTAL } = 1;
-        Minion->new( Pg => $self->_minion_config->{ dsn } );
+        Minion->new( $_[0]->config->{ backend } => $_[0]->config->{ dsn } );
     },
 );
 
 sub BUILD {
-    my $self = shift;
-
-    @VALID_QUEUES = $self->_minion_config->{ valid_queues }->@*;
+    @VALID_QUEUES = $_[0]->config->{ valid_queues }->@*;
 }
 
 sub has_invalid_queues {

@@ -2,7 +2,7 @@
 plugins:
    minion:
       dsn: postgresql://postgres:cg73w%!p%pg3@devdb1.clearbuilt.com/minion
-      driver: Pg
+      backend: Pg
 
       # What queues should we accept jobs for?
       valid_queues:
