@@ -2,7 +2,8 @@ package Dancer2::Plugin::Minion;
 
 use Dancer2::Plugin;
 use Minion;
-use Data::Dumper;
+
+our $VERSION = '0.1.0';
 
 plugin_keywords qw(
     minion
@@ -11,35 +12,30 @@ plugin_keywords qw(
 );
 
 has _backend => (
-    is => 'ro',
+    is          => 'ro',
     from_config => 'backend',
-    default => sub{ '' },
+    default     => sub{ '' },
 );
 
 has _dsn => (
-    is => 'ro',
+    is          => 'ro',
     from_config => 'dsn',
-    default => sub{ '' },
+    default     => sub{ '' },
 );
 
 has 'minion' => (
     is      => 'ro',
     lazy    => 1,
     default => sub {
-        #print STDERR $_[0]->_backend . " AND " . $_[0]->_dsn . "\n";
         Minion->new( $_[0]->_backend => $_[0]->_dsn );
     },
 );
 
 sub add_task {
-    print STDERR "add\n";
-    #return $_[0]->minion;
     return $_[0]->minion->add_task( @_ );
 }
 
 sub enqueue {
-    print STDERR "enqueue\n";
-    #return $_[0]->minion;
     return $_[0]->minion->enqueue( $_[1] );
 }
 
@@ -50,7 +46,8 @@ __END__
 
 =head1 NAME
 
-Clearbuilt::JobQueue - Easy access to Minion job queue in Clearbuilt applications
+Dancer2::Plugin::Minion - Easy access to Minion job queue in your Dancer2 
+applications
 
 =head1 SYNOPSIS
 
@@ -78,17 +75,14 @@ Clearbuilt::JobQueue - Easy access to Minion job queue in Clearbuilt application
 
 =head1 DESCRIPTION
 
-C<Clearbuilt::JobQueue> makes it easy to add a job queue to any of your
-Clearbuilt applications. The queue is powered by L<Minion> and uses the
-L<Minion::Backend::Pg> provider.
+C<Dancer2::Plugin::Minion> makes it easy to add a job queue to any of your
+L<Dancer2> applications. The queue is powered by L<Minion> and uses a 
+backend of your choosing, such as PostgreSQL or SQLite.
 
-To create a job, you use the C<add_task()> method present on the runner. The
-developer gives that job a name, which can then be used to invoke or monitor 
-the job at a later time. Jobs can be created anywhere in your application,
-so long as the runner has been instantiated.
-
-Each job may have an unlimited amount of metadata associated with them. To add
-metadata, use the C<notes> attribute present on the job.
+The plugin lazily instantiates a Minion object, which is accessible via the
+C<minion> keyword. Any method, attribute, or event you need in Minion is 
+available via this keyword. Additionally, C<add_task> and C<enqueue> keywords
+are available to make it convenient to add and start new queued jobs.
 
 See the L<Minion> documentation for more complete documentation on the methods
 and functionality available.
@@ -101,25 +95,6 @@ The L<Minion>-based object. See the L<Minion> documentation for a list of
 additional methods provided.
 
 =head1 METHODS
-
-=head2 has_invalid_queues()
-
-Checks the provided list of job queue names for validity. Takes a single queue
-name or a list of names. Returns true if any of the provided queue names are
-invalid, otherwise returns false.
-
-=head2 get_hostname()
-
-Get the short hostname of this box.
-
-=head2 get_hostconfig()
-
-Get the Minion configuration for this host.
-
-=head2 get_invalid_queues()
-
-Given a list of queue names (or, a singluar queue name), return the list of
-queue names that are invalid.
 
 =head2 run_job()
 
@@ -157,6 +132,33 @@ Arguments to the job we are running. Required if the job requires any.
 =back
 
 Requires a job name, and if the job requires any, job arguments.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<Dancer2>
+
+=item * L<Minion>
+
+=back
+
+=head1 AUTHOR
+
+Jason A. Crome C< cromedome AT cpan DOT org >
+
+=head1 ACKNOWLEDGEMENTS
+
+I'd like to extend a hearty thanks to my employer, Clearbuild Technologies,
+for giving me the necessary time and support for this module to come to
+life.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (c) 2020, Clearbuilt Technologies.
+
+This is free software; you can redistribute it and/or modify it under 
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
