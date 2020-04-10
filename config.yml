@@ -1,4 +1,4 @@
 plugins:
     Minion:
-        dsn: sqlite:test.db
+        dsn: sqlite:memory
         backend: SQLite

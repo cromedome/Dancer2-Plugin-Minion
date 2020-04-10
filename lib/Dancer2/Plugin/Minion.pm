@@ -51,27 +51,32 @@ applications
 
 =head1 SYNOPSIS
 
-    use Clearbuilt::JobQueue;
+    package MyApp;
+    use Dancer2;
+    use Dancer2::Plugin::Minion;
 
-    # Somewhere in your code....
-    my $runner = Clearbuilt::JobQueue->new->runner;
+    get '/' => sub {
+        add_task( add => sub {
+            my ($job, $first, $second) = @_;
+            $job->finish($first + $second);
+        });
+    };
 
-    # $runner is an object of type Minion
-    $runner->add_task( yarn_reconcile_import => sub( $job, $args {
-        # Do something long
-        $job->note(
-            # Insert some metadata here...
-        );
-    });
+    get '/another-route' => sub {
+        my $id = enqueue(add => [1, 1]);
+        # Do something with $id
+    };
 
-    # Later in the code...
-    $runner->run_job({
-        name     => "yarn_reconcile_import",
-        project  => 'efab',
-        title    => "Yarn Reconcile Import",
-        queue    => 'efab',
-        job_args => [ 1, 2, 3 ],
-    });
+    get '/yet-another-route' => sub {
+        # Get a job ID, then...
+        my $result = minion->job($id)->info->{result};
+    };
+
+    # In config.yml
+    plugins:
+        Minion:
+            dsn: sqlite:test.db
+            backend: SQLite
 
 =head1 DESCRIPTION
 
@@ -89,49 +94,24 @@ and functionality available.
 
 =head1 ATTRIBUTES
 
-=head2 runner
+=head2 minion
 
 The L<Minion>-based object. See the L<Minion> documentation for a list of
 additional methods provided.
 
 =head1 METHODS
 
-=head2 run_job()
+=head2 add_task()
 
-Run a defined job in the job queue, and configure that job the way we are
-accustomed to seeing them. This includes how it gets logged and how the 
-process gets named. Takes a hashref of the following parameters:
+Keyword/shortcut for C<minion->add_task()>. See 
+L<Minion's add_task() documentation|https://metacpan.org/pod/Minion#add_task> for
+more information.
 
-=over 4
+=head2 enqueue()
 
-=item * name
-
-Name of the job to be run. This is name of the job previously C<enqueue()>d 
-that we are running. Required.
-
-=item * project
-
-Name of the project this job is for. Project + environment + job name is 
-transformed into the name that we pass into Minion. Required.
-
-=item * queue
-
-Optional. Named queue to insert the job into. Uses a default queue if none
-is specified. If we aren't running in production, automatically creates
-and uses a queue named for the current environment.
-
-=item * title
-
-The human-readable name of the job. Shows up in logs and dashboards. Defaults
-to the job name.
-
-=item * job_args
-
-Arguments to the job we are running. Required if the job requires any.
-
-=back
-
-Requires a job name, and if the job requires any, job arguments.
+Keyword/shortcut for C<minion->enqueue()>. 
+See L<Minion's enqueue() documentation|https://metacpan.org/pod/Minion#enqueue1>
+for more information.
 
 =head1 SEE ALSO
 
@@ -149,7 +129,7 @@ Jason A. Crome C< cromedome AT cpan DOT org >
 
 =head1 ACKNOWLEDGEMENTS
 
-I'd like to extend a hearty thanks to my employer, Clearbuild Technologies,
+I'd like to extend a hearty thanks to my employer, Clearbuilt Technologies,
 for giving me the necessary time and support for this module to come to
 life.
 

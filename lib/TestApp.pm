@@ -14,6 +14,12 @@ get '/' => sub {
 
 get '/start' => sub { 
     my $id = enqueue( foo => [ qw( Foo Bar Baz ) ] );
-    minion->foreground( $id );
-    return "OK - job started";
+    var job_id => $id;
+    return "OK - job $id started";
+};
+
+get '/state/:id' => sub {
+    my $id = route_parameters->get( 'id' );
+    my $state = minion->job( $id )->info->{ state };
+    return "State for $id is $state";
 };
