@@ -1,4 +1,4 @@
 plugins:
     Minion:
-        dsn: sqlite:memory
+        dsn: sqlite::memory:
         backend: SQLite
