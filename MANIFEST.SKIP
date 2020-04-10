@@ -1,1 +1,0 @@
-^(?:Dancer2\-Plugin\-Minion-v?[0-9_.]+/|(?!lib/.*\.pm$|lib/.*\.pod$|t/.*\.t$|t/lib/.*\.pm$|xt/.*\.t$|xt/lib/.*\.pm$|(?^:[^/]*\.PL)$|(?^:Changes|MANIFEST|README|LICENSE|META\.yml)$|maint/(?^:[^.].*)$))
