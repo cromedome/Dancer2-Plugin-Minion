@@ -7,3 +7,4 @@
 Dancer2
 Minion
 Minion::Backend::sqlite
+Test::WWW::Mechanize::PSGI;

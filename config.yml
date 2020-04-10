@@ -1,4 +1,0 @@
-plugins:
-    Minion:
-        dsn: sqlite::memory:
-        backend: SQLite

@@ -1,8 +1,15 @@
 package TestApp;
 
+use Cwd;
 use Dancer2;
 use Dancer2::Plugin::Minion;
-use Data::Dumper;
+
+set plugins => {
+    'Minion' => {
+        dsn     => 'sqlite::memory:',
+        backend => 'SQLite',
+    },
+};
 
 get '/' => sub {
     add_task( foo => sub {
