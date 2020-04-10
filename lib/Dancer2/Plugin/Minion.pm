@@ -1,5 +1,7 @@
 package Dancer2::Plugin::Minion;
 
+# ABSTRACT: Use the Minion job queue in your Dancer2 apps.
+
 use Dancer2::Plugin;
 use Minion;
 
