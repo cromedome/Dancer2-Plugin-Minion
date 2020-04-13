@@ -106,13 +106,34 @@ additional methods provided.
 =head2 add_task()
 
 Keyword/shortcut for C<minion->add_task()>. See 
-L<Minion's add_task() documentation|https://metacpan.org/pod/Minion#add_task> for
+L<Minion's add_task() documentation|Minion/add_task> for
 more information.
 
 =head2 enqueue()
 
 Keyword/shortcut for C<minion->enqueue()>. 
-See L<Minion's enqueue() documentation|https://metacpan.org/pod/Minion#enqueue1>
+See L<Minion's enqueue() documentation|Minion/enqueue1>
+for more information.
+
+=head1 RUNNING JOBS
+
+You will need to create a Minion worker if you want to be able to run your 
+queued jobs. Thankfully, you can write a minimal worker with just a few
+lines of code:
+
+    #!/usr/bin/env perl
+
+    use Dancer2;
+    use Dancer2::Plugin::Minion;
+    use MyJobLib;
+
+    minion->add_task( my_job_1 => MyJobLib::job1());
+
+    my $worker = Minion::Worker->new( minion );
+    $worker->run;
+
+By using C<Dancer2::Plugin::Minion>, your worker will be configured with 
+the settings provided in your F<config.yml> file. See L<Minion::Worker> 
 for more information.
 
 =head1 SEE ALSO
