@@ -11,7 +11,7 @@ plugin_keywords qw(
     minion
     add_task
     enqueue
-    minion_ui
+    minion_app
 );
 
 has _backend => (
@@ -42,7 +42,7 @@ sub enqueue {
     return shift->minion->enqueue( @_ );
 }
 
-sub minion_ui {
+sub minion_app {
     my $plugin = shift;
     my $return_to = shift || '/';
 
@@ -98,7 +98,7 @@ applications
     };
 
     build {
-      mount '/dashboard/' => minion_ui->start;
+      mount '/dashboard/' => minion_app->start;
       mount '/' => start;
     }
 
@@ -143,7 +143,7 @@ Keyword/shortcut for C<< minion->enqueue() >>.
 See L<Minion's enqueue() documentation|Minion/enqueue1>
 for more information.
 
-=head2 minion_ui()
+=head2 minion_app()
 
 Build a L<Mojolicious> application with the
 L<Mojolicious::Plugin::Minion::Admin> application running. This application can
