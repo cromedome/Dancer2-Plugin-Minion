@@ -162,6 +162,8 @@ led to the improvement of this plugin:
 =over 4
 
 =item * Gabor Szabo
+=item * Joel Berger
+=item * Slaven Rezić
 
 =back
 
