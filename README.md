@@ -8,6 +8,7 @@ applications
     package MyApp;
     use Dancer2;
     use Dancer2::Plugin::Minion;
+    use Plack::Builder;
 
     get '/' => sub {
         add_task( add => sub {
@@ -25,6 +26,11 @@ applications
         # Get a job ID, then...
         my $result = minion->job($id)->info->{result};
     };
+
+    build {
+      mount '/dashboard/' => minion_app->start;
+      mount '/' => start;
+    }
 
     # In config.yml
     plugins:
@@ -66,6 +72,18 @@ more information.
 Keyword/shortcut for `minion->enqueue()`. 
 See [Minion's enqueue() documentation](https://metacpan.org/pod/Minion#enqueue1)
 for more information.
+
+## minion\_app()
+
+Build a [Mojolicious](https://metacpan.org/pod/Mojolicious) application with the
+[Mojolicious::Plugin::Minion::Admin](https://metacpan.org/pod/Mojolicious%3A%3APlugin%3A%3AMinion%3A%3AAdmin) application running. This application can
+then be started and mounted inside your own but be sure to leave a trailing
+slash in your mount path!
+
+You can optionally pass in an absolute URL to act as the "return to" link. The url must
+be absolute or else it will be made relative to the admin UI, which is probably
+not what you want. For example: 
+`mount '/dashboard/' => minion_app( '/foo/bar' )->start;`
 
 # RUNNING JOBS
 
@@ -121,6 +139,6 @@ the same terms as the Perl 5 programming language system itself.
 
 Hey! **The above document had some coding errors, which are explained below:**
 
-- Around line 166:
+- Around line 206:
 
     Non-ASCII character seen before =encoding in 'Rezić'. Assuming UTF-8

@@ -2,7 +2,9 @@ Revision history for Dancer2-Plugin-Minion
 
 {{$NEXT}}
 
-* Add minion_app keyword (Joel Berger)
+* Add minion_app keyword (Joel Berger) (for real this time)
+
+0.3.0     Broken. My bad. (cromedome)
 
 0.2.1     2020-12-14 23:54:49-05:00 America/New_York
 

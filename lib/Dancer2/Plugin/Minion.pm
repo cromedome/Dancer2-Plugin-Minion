@@ -5,7 +5,7 @@ package Dancer2::Plugin::Minion;
 use Dancer2::Plugin;
 use Minion;
 
-our $VERSION = '0.3.0';
+our $VERSION = '0.3.1';
 
 plugin_keywords qw(
     minion
