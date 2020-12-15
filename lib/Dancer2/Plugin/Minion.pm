@@ -38,7 +38,7 @@ sub add_task {
 }
 
 sub enqueue {
-    return shift->minion->enqueue( $_[1] );
+    return shift->minion->enqueue( @_ );
 }
 
 1;
