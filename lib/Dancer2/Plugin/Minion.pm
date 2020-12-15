@@ -34,7 +34,7 @@ has 'minion' => (
 );
 
 sub add_task {
-    return $_[0]->minion->add_task( @_ );
+    return shift->minion->add_task( @_ );
 }
 
 sub enqueue {
