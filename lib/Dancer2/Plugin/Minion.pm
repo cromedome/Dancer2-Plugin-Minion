@@ -52,6 +52,8 @@ sub minion_ui {
 
     # emulate minion plugin, needed for admin panel
     $app->helper(minion => sub { $plugin->minion });
+    # enable the minion command system
+    push @{ $app->commands->namespaces }, 'Minion::Command';
 
     $app->plugin('Minion::Admin' => {
         route => $app->routes->any('/'),
