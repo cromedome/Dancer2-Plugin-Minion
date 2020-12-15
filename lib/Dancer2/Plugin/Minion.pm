@@ -156,6 +156,15 @@ I'd like to extend a hearty thanks to my employer, Clearbuilt Technologies,
 for giving me the necessary time and support for this module to come to
 life.
 
+The following contributors have sent patches, suggestions, or bug reports that
+led to the improvement of this plugin:
+
+=over 4
+
+=item * Gabor Szabo
+
+=back
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (c) 2020, Clearbuilt Technologies.
