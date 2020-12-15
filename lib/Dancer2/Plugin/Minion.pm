@@ -5,7 +5,7 @@ package Dancer2::Plugin::Minion;
 use Dancer2::Plugin;
 use Minion;
 
-our $VERSION = '0.2.1';
+our $VERSION = '0.3.0';
 
 plugin_keywords qw(
     minion
@@ -150,9 +150,10 @@ L<Mojolicious::Plugin::Minion::Admin> application running. This application can
 then be started and mounted inside your own but be sure to leave a trailing
 slash in your mount path!
 
-Optionally pass in an absolute url to act as the "return to" link. The url must
-be absolute or else it will be made relative to the admin ui, which is probably
-not what you want.
+You can optionally pass in an absolute URL to act as the "return to" link. The url must
+be absolute or else it will be made relative to the admin UI, which is probably
+not what you want. For example: 
+C<< mount '/dashboard/' => minion_app( '/foo/bar' )->start; >>
 
 =head1 RUNNING JOBS
 
