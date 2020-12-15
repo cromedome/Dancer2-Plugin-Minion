@@ -1,6 +1,10 @@
 Revision history for Dancer2-Plugin-Minion
 
 {{$NEXT}}
+* Fix argument list to enqueue() (Joel Berger)
+* Improve tests. Actually run test job (Jason Crome, Joel Berger)
+
+0.2.0     2020-12-14 23:18:51-05:00 America/New_York
 
 * Fixed documentation error (cromedome)
 * GH #2: Add GitHub Actions config (Gabor Szabo)
