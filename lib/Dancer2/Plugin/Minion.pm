@@ -34,11 +34,11 @@ has 'minion' => (
 );
 
 sub add_task {
-    return $_[0]->minion->add_task( @_ );
+    return shift->minion->add_task( @_ );
 }
 
 sub enqueue {
-    return $_[0]->minion->enqueue( $_[1] );
+    return shift->minion->enqueue( $_[1] );
 }
 
 1;
@@ -129,7 +129,7 @@ lines of code:
 
     minion->add_task( my_job_1 => MyJobLib::job1());
 
-    my $worker = Minion::Worker->new( minion );
+    my $worker = minion->worker;
     $worker->run;
 
 By using C<Dancer2::Plugin::Minion>, your worker will be configured with 
@@ -162,6 +162,8 @@ led to the improvement of this plugin:
 =over 4
 
 =item * Gabor Szabo
+=item * Joel Berger
+=item * Slaven Rezić
 
 =back
 

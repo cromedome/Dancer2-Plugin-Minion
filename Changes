@@ -4,6 +4,7 @@ Revision history for Dancer2-Plugin-Minion
 
 * Fixed documentation error (cromedome)
 * GH #2: Add GitHub Actions config (Gabor Szabo)
+* GH #3: Fix arguments passed to Minion's add_task. Resolves #1 (Joel Berger)
 
 0.1.0     2020-04-13 10:08:52-04:00 America/New_York
 
