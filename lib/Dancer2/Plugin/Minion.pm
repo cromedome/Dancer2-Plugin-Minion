@@ -129,7 +129,7 @@ lines of code:
 
     minion->add_task( my_job_1 => MyJobLib::job1());
 
-    my $worker = Minion::Worker->new( minion );
+    my $worker = minion->worker;
     $worker->run;
 
 By using C<Dancer2::Plugin::Minion>, your worker will be configured with 
