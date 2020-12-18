@@ -5,7 +5,7 @@ package Dancer2::Plugin::Minion;
 use Dancer2::Plugin;
 use Minion;
 
-our $VERSION = '0.3.1';
+our $VERSION = '0.3.2';
 
 plugin_keywords qw(
     minion
@@ -17,13 +17,13 @@ plugin_keywords qw(
 has _backend => (
     is          => 'ro',
     from_config => 'backend',
-    default     => sub{ '' },
+    default     => sub{ 'SQLite' },
 );
 
 has _dsn => (
     is          => 'ro',
     from_config => 'dsn',
-    default     => sub{ '' },
+    default     => sub{ ':temp:' },
 );
 
 has 'minion' => (
@@ -129,6 +129,11 @@ and functionality available.
 The L<Minion>-based object. See the L<Minion> documentation for a list of
 additional methods provided.
 
+If no backend is specified, Minion will default to an in-memory temporary
+database. This is not recommended for any serious use. See
+L<the Mojo::SQLite|https://metacpan.org/pod/Mojo::SQLite#BASICS> docs
+for details
+
 =head1 METHODS
 
 =head2 add_task()
@@ -153,7 +158,7 @@ slash in your mount path!
 You can optionally pass in an absolute URL to act as the "return to" link. The url must
 be absolute or else it will be made relative to the admin UI, which is probably
 not what you want. For example: 
-C<< mount '/dashboard/' => minion_app( '/foo/bar' )->start; >>
+C<< mount '/dashboard/' => minion_app( 'http://localhost:5000/foo' )->start; >>
 
 =head1 RUNNING JOBS
 
