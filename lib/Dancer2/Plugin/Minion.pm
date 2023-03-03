@@ -68,9 +68,11 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
-Dancer2::Plugin::Minion - Easy access to Minion job queue in your Dancer2 
+Dancer2::Plugin::Minion - Easy access to Minion job queue in your Dancer2
 applications
 
 =head1 SYNOPSIS
@@ -111,11 +113,11 @@ applications
 =head1 DESCRIPTION
 
 C<Dancer2::Plugin::Minion> makes it easy to add a job queue to any of your
-L<Dancer2> applications. The queue is powered by L<Minion> and uses a 
+L<Dancer2> applications. The queue is powered by L<Minion> and uses a
 backend of your choosing, such as PostgreSQL or SQLite.
 
 The plugin lazily instantiates a Minion object, which is accessible via the
-C<minion> keyword. Any method, attribute, or event you need in Minion is 
+C<minion> keyword. Any method, attribute, or event you need in Minion is
 available via this keyword. Additionally, C<add_task> and C<enqueue> keywords
 are available to make it convenient to add and start new queued jobs.
 
@@ -138,13 +140,13 @@ for details
 
 =head2 add_task()
 
-Keyword/shortcut for C<< minion->add_task() >>. See 
+Keyword/shortcut for C<< minion->add_task() >>. See
 L<Minion's add_task() documentation|Minion/add_task> for
 more information.
 
 =head2 enqueue()
 
-Keyword/shortcut for C<< minion->enqueue() >>. 
+Keyword/shortcut for C<< minion->enqueue() >>.
 See L<Minion's enqueue() documentation|Minion/enqueue1>
 for more information.
 
@@ -157,12 +159,12 @@ slash in your mount path!
 
 You can optionally pass in an absolute URL to act as the "return to" link. The url must
 be absolute or else it will be made relative to the admin UI, which is probably
-not what you want. For example: 
+not what you want. For example:
 C<< mount '/dashboard/' => minion_app( 'http://localhost:5000/foo' )->start; >>
 
 =head1 RUNNING JOBS
 
-You will need to create a Minion worker if you want to be able to run your 
+You will need to create a Minion worker if you want to be able to run your
 queued jobs. Thankfully, you can write a minimal worker with just a few
 lines of code:
 
@@ -177,8 +179,8 @@ lines of code:
     my $worker = minion->worker;
     $worker->run;
 
-By using C<Dancer2::Plugin::Minion>, your worker will be configured with 
-the settings provided in your F<config.yml> file. See L<Minion::Worker> 
+By using C<Dancer2::Plugin::Minion>, your worker will be configured with
+the settings provided in your F<config.yml> file. See L<Minion::Worker>
 for more information.
 
 =head1 SEE ALSO
@@ -207,7 +209,9 @@ led to the improvement of this plugin:
 =over 4
 
 =item * Gabor Szabo
+
 =item * Joel Berger
+
 =item * Slaven Rezić
 
 =back
@@ -216,7 +220,7 @@ led to the improvement of this plugin:
 
 Copyright (c) 2020, Clearbuilt Technologies.
 
-This is free software; you can redistribute it and/or modify it under 
+This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
