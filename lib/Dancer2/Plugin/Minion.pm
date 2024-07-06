@@ -218,7 +218,7 @@ led to the improvement of this plugin:
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2020, Clearbuilt Technologies.
+Copyright (c) 2024, Jason A. Crome
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
