@@ -195,7 +195,7 @@ for more information.
 
 =head1 AUTHOR
 
-Jason A. Crome C< cromedome AT cpan DOT org >
+Jason A. Crome C< cpan AT jason DOT cromedome DOT dev >
 
 =head1 ACKNOWLEDGEMENTS
 
