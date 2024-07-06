@@ -214,6 +214,8 @@ led to the improvement of this plugin:
 
 =item * Slaven Rezić
 
+=item * Julien Fiegehenn
+
 =back
 
 =head1 COPYRIGHT AND LICENSE
