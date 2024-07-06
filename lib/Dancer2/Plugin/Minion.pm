@@ -89,14 +89,14 @@ applications
         });
     };
 
-    get '/another-route' => sub {
-        my $id = enqueue(add => [1, 1]);
-        # Do something with $id
+    get '/start-job' => sub {
+        my $id = enqueue( add => [1, 1] );
+        return "Started job ID $id";
     };
 
-    get '/yet-another-route' => sub {
-        # Get a job ID, then...
-        my $result = minion->job($id)->info->{result};
+    get '/job-results/:job_id' => sub {
+        my $id     = route_parameters->get( 'job_id' ) // 0;
+        my $result = minion->job( $id )->info->{ result };
     };
 
     build {
@@ -172,9 +172,11 @@ lines of code:
 
     use Dancer2;
     use Dancer2::Plugin::Minion;
-    use MyJobLib;
 
-    minion->add_task( my_job_1 => MyJobLib::job1());
+    minion->add_task( add => sub {
+        my ( $job, $first, $second ) = @_;
+        $job->finish( $first + $second );
+    });
 
     my $worker = minion->worker;
     $worker->run;
@@ -195,7 +197,7 @@ for more information.
 
 =head1 AUTHOR
 
-Jason A. Crome C< cromedome AT cpan DOT org >
+Jason A. Crome C< cpan AT jason DOT cromedome DOT dev >
 
 =head1 ACKNOWLEDGEMENTS
 
@@ -214,11 +216,13 @@ led to the improvement of this plugin:
 
 =item * Slaven Rezić
 
+=item * Julien Fiegehenn
+
 =back
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2020, Clearbuilt Technologies.
+Copyright (c) 2024, Jason A. Crome
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
