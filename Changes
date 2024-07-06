@@ -2,6 +2,8 @@ Revision history for Dancer2-Plugin-Minion
 
 {{$NEXT}}
 
+1.0.0     2024-07-05 23:46:17-04:00 America/New_York
+
 * Fix broken POD (Julien Fiegehenn)
 * Remove garbage file from repo (Julien Fiegehenn)
 * Numerous packaging cleanups
