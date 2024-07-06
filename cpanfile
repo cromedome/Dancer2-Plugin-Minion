@@ -5,4 +5,5 @@ requires 'Mojolicious::Plugin::Minion::Admin';
 
 test_requires 'Test::More', '0.92';
 test_requires 'Test::WWW::Mechanize::PSGI';
+test_requires 'Minion::Backend::SQLite';
 
