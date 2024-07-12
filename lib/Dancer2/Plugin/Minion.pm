@@ -199,9 +199,8 @@ Jason A. Crome C< cpan AT jason DOT cromedome DOT dev >
 
 =head1 ACKNOWLEDGEMENTS
 
-I'd like to extend a hearty thanks to my employer, Clearbuilt Technologies,
-for giving me the necessary time and support for this module to come to
-life.
+I'd like to extend a hearty thanks to Clearbuilt Technologies for providing
+the necessary time and support for this module to come to life.
 
 The following contributors have sent patches, suggestions, or bug reports that
 led to the improvement of this plugin:
